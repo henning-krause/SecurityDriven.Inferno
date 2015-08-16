@@ -96,8 +96,8 @@ namespace SecurityDriven.Inferno
 		public bool IsAuthenticateOnly { get; private set; }
 
 		byte[] key;
-		uint currentChunkNumber;
-		ArraySegment<byte>? salt;
+	    public uint CurrentChunkNumber { get; private set; }
+	    ArraySegment<byte>? salt;
 
 		public uint CurrentChunkNumber { get { return this.currentChunkNumber; } }
 
@@ -107,7 +107,7 @@ namespace SecurityDriven.Inferno
 			if (key == null) throw new ArgumentNullException("key", "key cannot be null.");
 			this.key = key;
 			this.salt = salt;
-			this.currentChunkNumber = chunkNumber;
+			this.CurrentChunkNumber = chunkNumber;
 			this.IsAuthenticateOnly = authenticateOnly;
 		}
 
@@ -134,7 +134,7 @@ namespace SecurityDriven.Inferno
 							masterKey: this.key,
 							ciphertext: cipherText,
 							salt: this.salt,
-							counter: this.currentChunkNumber))
+							counter: this.CurrentChunkNumber))
 							outputSegment = null;
 					}
 					else
@@ -144,15 +144,15 @@ namespace SecurityDriven.Inferno
 							ciphertext: cipherText,
 							outputSegment: ref outputSegment,
 							salt: this.salt,
-							counter: this.currentChunkNumber);
+							counter: this.CurrentChunkNumber);
 					}
 
 					if (outputSegment == null)
 					{
 						this.key = null;
-						throw new CryptographicException("Decryption failed for block " + this.currentChunkNumber.ToString() + ".");
+						throw new CryptographicException("Decryption failed for block " + this.CurrentChunkNumber.ToString() + ".");
 					}
-					++this.currentChunkNumber;
+					++this.CurrentChunkNumber;
 				}
 			}
 			return j;
@@ -176,7 +176,7 @@ namespace SecurityDriven.Inferno
 					masterKey: this.key,
 					ciphertext: cipherText,
 					salt: this.salt,
-					counter: this.currentChunkNumber))
+					counter: this.CurrentChunkNumber))
 					outputBuffer = Utils.ZeroLengthArray<byte>.Value;
 			}
 			else
@@ -185,11 +185,11 @@ namespace SecurityDriven.Inferno
 					masterKey: this.key,
 					ciphertext: cipherText,
 					salt: this.salt,
-					counter: this.currentChunkNumber);
+					counter: this.CurrentChunkNumber);
 			}
 			this.Dispose();
 			if (outputBuffer == null)
-				throw new CryptographicException("Decryption failed for block " + this.currentChunkNumber.ToString() + ".");
+				throw new CryptographicException("Decryption failed for block " + this.CurrentChunkNumber.ToString() + ".");
 
 			this.IsComplete = true;
 			return outputBuffer;
