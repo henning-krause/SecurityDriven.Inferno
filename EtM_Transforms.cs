@@ -23,8 +23,6 @@ namespace SecurityDriven.Inferno
 	    public uint CurrentChunkNumber { get; private set; }
 	    ArraySegment<byte>? salt;
 
-		public uint CurrentChunkNumber { get { return this.currentChunkNumber; } }
-
 		/// <summary>ctor</summary>
 		public EtM_EncryptTransform(byte[] key, ArraySegment<byte>? salt = null, uint chunkNumber = 1)
 		{
@@ -98,8 +96,6 @@ namespace SecurityDriven.Inferno
 		byte[] key;
 		uint currentChunkNumber;
 		ArraySegment<byte>? salt;
-
-		public uint CurrentChunkNumber { get { return this.currentChunkNumber; } }
 
 		/// <summary>ctor</summary>
 		public EtM_DecryptTransform(byte[] key, ArraySegment<byte>? salt = null, uint chunkNumber = 1, bool authenticateOnly = false)
